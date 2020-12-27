@@ -6,7 +6,7 @@ export class AbortError extends BaseError<{}> {
   }
 }
 
-type Task<T> = (signal?: AbortSignal) => Promise<T>
+type Task<T> = (signal: AbortSignal) => Promise<T>
 
 export default async function raceAbort<T>(
   signal: AbortSignal,

@@ -1,6 +1,6 @@
 {
   "name": "race-abort",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "utility to race a promise with an abort signal",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",

@@ -6,11 +6,11 @@ export class AbortError extends BaseError<{}> {
   }
 }
 
-type Task<T> = (signal: AbortSignal) => Promise<T>
+type Task<T> = (signal: AbortSignal) => Promise<T> | T
 
 export default async function raceAbort<T>(
   signal: AbortSignal,
-  taskOrPromise: Promise<T> | Task<T>,
+  taskOrPromise: Promise<T> | Task<T> | T,
 ): Promise<T> {
   let handleAbort: () => void
   try {
@@ -18,10 +18,11 @@ export default async function raceAbort<T>(
       handleAbort = () => reject(new AbortError())
       if (signal.aborted) handleAbort()
       signal.addEventListener('abort', handleAbort)
-      const promise =
+      const promise = Promise.resolve<T>(
         typeof taskOrPromise === 'function'
-          ? taskOrPromise(signal)
-          : taskOrPromise
+          ? (taskOrPromise as Function)(signal)
+          : taskOrPromise,
+      )
       promise.then(resolve, reject)
     })
   } finally {

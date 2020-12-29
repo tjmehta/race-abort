@@ -16,7 +16,11 @@ export default async function raceAbort<T>(
   try {
     return await new Promise((resolve, reject) => {
       handleAbort = () => reject(new AbortError())
-      if (signal.aborted) handleAbort()
+      if (signal.aborted) {
+        // @ts-ignore - ignore promise errors
+        if (taskOrPromise?.catch) taskOrPromise.catch((err) => {})
+        return void handleAbort()
+      }
       signal.addEventListener('abort', handleAbort)
       const promise = Promise.resolve<T>(
         typeof taskOrPromise === 'function'

@@ -11,7 +11,9 @@ export type OptsType = {
 export class AbortError {
   name = 'AbortError'
   message = 'aborted'
+  stack = 'AbortError: aborted'
 }
+Object.setPrototypeOf(AbortError.prototype, Error.prototype)
 
 export default async function raceAbort<T>(
   opts: AbortSignal | OptsType,

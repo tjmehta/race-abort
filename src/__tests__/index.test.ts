@@ -1,7 +1,5 @@
 import raceAbort, { AbortError } from '../index'
 
-import AbortController from 'abort-controller'
-
 describe('raceAbort', () => {
   describe('promise wins race', () => {
     it('should resolve value if racing a resolved promise', async () => {
@@ -38,6 +36,15 @@ describe('raceAbort', () => {
       await expect(
         raceAbort(controller.signal, Promise.reject(err)),
       ).rejects.toBeInstanceOf(AbortError)
+    })
+
+    it('should reject with AbortError and AbortError is instance of Error', async () => {
+      const controller = new AbortController()
+      controller.abort()
+      const err = new Error('boom')
+      await expect(
+        raceAbort(controller.signal, Promise.reject(err)),
+      ).rejects.toBeInstanceOf(Error)
     })
   })
 

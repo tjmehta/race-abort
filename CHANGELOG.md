@@ -1,3 +1,8 @@
+# v3.0.3
+
+- patch: fix build files for exports
+
+
 # v3.0.2
 
 - patch: fix build files for exports
